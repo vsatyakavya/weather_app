@@ -22,6 +22,7 @@ public class WeatherController {
 
     @GetMapping("/bycity")
     public String getWeatherByCityName(@RequestParam String cityName){
+
         return businessLogic.getWeatherDetails(cityName);
     }
 }
