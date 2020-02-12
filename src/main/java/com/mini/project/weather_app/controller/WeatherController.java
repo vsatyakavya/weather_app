@@ -1,7 +1,7 @@
 package com.mini.project.weather_app.controller;
 
 import com.mini.project.weather_app.service.WeatherService;
-import org.springframework.beans.factory.annotation.Autowired;
+import dto.OutBoundPayload;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +21,7 @@ public class WeatherController {
     }
 
     @GetMapping("/bycity")
-    public String getWeatherByCityName(@RequestParam String cityName){
+    public OutBoundPayload getWeatherByCityName(@RequestParam String cityName){
 
         return businessLogic.getWeatherDetails(cityName);
     }

@@ -1,5 +1,7 @@
 package com.mini.project.weather_app.service;
 
+import dto.InBoundPayload;
+import dto.OutBoundPayload;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,7 +20,7 @@ public class WeatherService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    public String getWeatherDetails(String cityName) {
+    public OutBoundPayload getWeatherDetails(String cityName) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
@@ -28,11 +30,20 @@ public class WeatherService {
 
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
-        HttpEntity<String> response = restTemplate.exchange(
+        HttpEntity<InBoundPayload> response = restTemplate.exchange(
                 builder.toUriString(),
                 HttpMethod.GET,
                 entity,
-                String.class);
-        return response.getBody().toString();
+                InBoundPayload.class);
+
+           InBoundPayload inBoundPayload = response.getBody();
+           OutBoundPayload outBoundPayload = new OutBoundPayload();
+           outBoundPayload.setCityName(inBoundPayload.getName());
+           outBoundPayload.setCountry(inBoundPayload.getSys().getCountry());
+           outBoundPayload.setDescription(inBoundPayload.getWeather().get(0).getDescription());
+           outBoundPayload.setSunRise(inBoundPayload.getSys().getSunrise());
+           outBoundPayload.setSunSet(inBoundPayload.getSys().getSunset());
+
+        return outBoundPayload;
     }
 }
